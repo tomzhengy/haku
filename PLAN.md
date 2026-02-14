@@ -30,7 +30,7 @@ see `.env.example` for required secrets. see step 3 below for creating the slack
 - [x] step 5: add AI provider key to ~/.openclaw/.env (anthropic)
 - [x] step 6: restart gateway and verify locally
 - [x] step 7: test slack bot
-- [ ] step 8: deploy to azure VM (free tier)
+- [x] step 8: deploy to azure VM (B2s, 20.119.67.51)
 
 ## Remaining Local Steps
 
@@ -72,7 +72,8 @@ see `.env.example` for required secrets. see step 3 below for creating the slack
         "pins:write",
         "emoji:read",
         "files:read",
-        "files:write"
+        "files:write",
+        "im:write"
       ]
     }
   },
