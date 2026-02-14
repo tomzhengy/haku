@@ -13,7 +13,7 @@ prompt_secret() {
   local var_name="$1"
   local current_value="${!var_name:-}"
   if [[ -n "$current_value" ]]; then
-    log "$var_name provided via env"
+    echo "==> $var_name provided via env" >&2
   else
     read -rp "$var_name: " current_value
     [[ -z "$current_value" ]] && err "$var_name is required"
