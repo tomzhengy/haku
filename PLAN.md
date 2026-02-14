@@ -1,5 +1,24 @@
 # OpenClaw Slack Bot Setup Plan
 
+## Quick Deploy (Azure VM)
+
+```bash
+ssh azureuser@<VM_IP>
+git clone <repo-url>
+cd haku
+SLACK_APP_TOKEN=xapp-... SLACK_BOT_TOKEN=xoxb-... ANTHROPIC_API_KEY=sk-... ./setup.sh
+```
+
+or interactively (will prompt for each secret):
+
+```bash
+./setup.sh
+```
+
+see `.env.example` for required secrets. see step 3 below for creating the slack app.
+
+---
+
 ## Current Status
 
 - [x] step 1: check node.js 22+ (v22.21.1)
