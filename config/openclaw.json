@@ -1,7 +1,8 @@
 {
   "commands": {
     "native": "auto",
-    "nativeSkills": "auto"
+    "nativeSkills": "auto",
+    "restart": true
   },
   "channels": {
     "slack": {
