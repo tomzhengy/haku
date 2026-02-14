@@ -6,9 +6,9 @@
 - [x] step 2: install openclaw (v2026.2.13)
 - [x] step 2b: create config files (~/.openclaw/openclaw.json, ~/.openclaw/.env)
 - [x] step 2c: install gateway daemon (LaunchAgent)
-- [ ] step 3: create slack app (manual -- browser)
-- [ ] step 4: get tokens and update ~/.openclaw/.env
-- [ ] step 5: add AI provider key to ~/.openclaw/.env
+- [x] step 3: create slack app (manual -- browser)
+- [x] step 4: get tokens and update ~/.openclaw/.env
+- [x] step 5: add AI provider key to ~/.openclaw/.env (anthropic)
 - [ ] step 6: restart gateway and verify locally
 - [ ] step 7: test slack bot
 - [ ] step 8: deploy to azure VM (free tier)
