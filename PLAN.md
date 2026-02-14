@@ -10,7 +10,7 @@
 - [x] step 4: get tokens and update ~/.openclaw/.env
 - [x] step 5: add AI provider key to ~/.openclaw/.env (anthropic)
 - [x] step 6: restart gateway and verify locally
-- [ ] step 7: test slack bot
+- [x] step 7: test slack bot
 - [ ] step 8: deploy to azure VM (free tier)
 
 ## Remaining Local Steps
