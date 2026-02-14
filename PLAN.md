@@ -9,7 +9,7 @@
 - [x] step 3: create slack app (manual -- browser)
 - [x] step 4: get tokens and update ~/.openclaw/.env
 - [x] step 5: add AI provider key to ~/.openclaw/.env (anthropic)
-- [ ] step 6: restart gateway and verify locally
+- [x] step 6: restart gateway and verify locally
 - [ ] step 7: test slack bot
 - [ ] step 8: deploy to azure VM (free tier)
 
