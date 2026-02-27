@@ -59,6 +59,7 @@ cleanup-agents.sh (daily cron, 3am)
 ### spawn-agent.sh
 
 entry point for creating new agent tasks. handles:
+
 - concurrency limits (queues if at max)
 - worktree creation
 - registry bookkeeping
@@ -67,6 +68,7 @@ entry point for creating new agent tasks. handles:
 ### check-agents.sh
 
 monitoring daemon (cron). handles:
+
 - detecting dead agents (PID check)
 - finding PRs created by agents
 - triggering code reviews
@@ -79,6 +81,7 @@ also supports `--status` flag for on-demand status checks.
 ### review-pr.sh
 
 automated code review. handles:
+
 - fetching PR diff and description
 - claude-powered review focusing on correctness, security, performance
 - posting review as PR comment
@@ -86,6 +89,7 @@ automated code review. handles:
 ### notify.sh
 
 notification dispatch. handles:
+
 - slack via openclaw message send
 - whatsapp via openclaw message send
 - fallback to stderr if send fails
@@ -93,6 +97,7 @@ notification dispatch. handles:
 ### cleanup-agents.sh
 
 daily maintenance. handles:
+
 - archiving old tasks (>48h in terminal state)
 - removing worktrees
 - deleting merged/closed remote branches
@@ -103,16 +108,16 @@ daily maintenance. handles:
 
 all settings are environment variables with sensible defaults:
 
-| variable | default | description |
-|---|---|---|
-| SWARM_DIR | ~/.clawdbot | base directory for runtime state |
-| MAX_CONCURRENT | 2 | max simultaneous agents |
-| MAX_TASK_AGE_HOURS | 24 | kill agents older than this |
-| SWARM_SLACK_CHANNEL | (none) | slack channel for notifications |
-| SWARM_WHATSAPP_TARGET | (none) | whatsapp number for notifications |
-| MIN_FREE_MEMORY_KB | 1048576 | minimum free memory to spawn (1GB) |
-| ARCHIVE_AFTER_HOURS | 48 | archive tasks after this many hours |
-| LOG_RETAIN_DAYS | 7 | delete logs older than this |
+| variable              | default     | description                         |
+| --------------------- | ----------- | ----------------------------------- |
+| SWARM_DIR             | ~/.clawdbot | base directory for runtime state    |
+| MAX_CONCURRENT        | 2           | max simultaneous agents             |
+| MAX_TASK_AGE_HOURS    | 24          | kill agents older than this         |
+| SWARM_SLACK_CHANNEL   | (none)      | slack channel for notifications     |
+| SWARM_WHATSAPP_TARGET | (none)      | whatsapp number for notifications   |
+| MIN_FREE_MEMORY_KB    | 1048576     | minimum free memory to spawn (1GB)  |
+| ARCHIVE_AFTER_HOURS   | 48          | archive tasks after this many hours |
+| LOG_RETAIN_DAYS       | 7           | delete logs older than this         |
 
 ## edge cases
 

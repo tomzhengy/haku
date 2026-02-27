@@ -33,7 +33,19 @@ done
 
 [[ -z "$REPO" || -z "$TASK_ID" || -z "$PROMPT" ]] && usage
 
+# validate task id format
+if [[ ! "$TASK_ID" =~ ^[a-z0-9][a-z0-9-]*[a-z0-9]$ ]] && [[ ! "$TASK_ID" =~ ^[a-z0-9]$ ]]; then
+  echo "ERROR: task id must be lowercase alphanumeric with hyphens (kebab-case)" >&2
+  exit 1
+fi
+
 BRANCH="${BRANCH:-claude/$TASK_ID}"
+
+# validate branch name
+if [[ ! "$BRANCH" =~ ^[a-zA-Z0-9/_.-]+$ ]]; then
+  echo "ERROR: branch name contains invalid characters: $BRANCH" >&2
+  exit 1
+fi
 
 # --- validate ---
 
@@ -106,8 +118,10 @@ mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/$TASK_ID.log"
 
 echo "launching claude agent for task '$TASK_ID'..."
+cd "$WORKTREE_PATH"
 nohup claude --dangerously-skip-permissions -p "$AGENT_PROMPT" > "$LOG_FILE" 2>&1 &
 AGENT_PID=$!
+cd "$SCRIPT_DIR"
 
 # record pid
 registry_set_field "$TASK_ID" "pid" "$AGENT_PID"

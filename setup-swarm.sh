@@ -143,8 +143,8 @@ fi
 
 log "installing cron jobs..."
 
-CRON_CHECK="*/10 * * * * $SCRIPT_DIR/swarm/check-agents.sh >> $SWARM_DIR/logs/cron.log 2>&1"
-CRON_CLEANUP="0 3 * * * $SCRIPT_DIR/swarm/cleanup-agents.sh >> $SWARM_DIR/logs/cleanup.log 2>&1"
+CRON_CHECK="*/10 * * * * PATH=/usr/local/bin:/usr/bin:/bin $SCRIPT_DIR/swarm/check-agents.sh >> $SWARM_DIR/logs/cron.log 2>&1"
+CRON_CLEANUP="0 3 * * * PATH=/usr/local/bin:/usr/bin:/bin $SCRIPT_DIR/swarm/cleanup-agents.sh >> $SWARM_DIR/logs/cleanup.log 2>&1"
 
 # get existing crontab (suppress "no crontab" error)
 EXISTING_CRON="$(crontab -l 2>/dev/null || true)"
@@ -197,8 +197,9 @@ log "running verification checks..."
 PASS=0 FAIL=0
 
 check() {
-  local desc="$1" cmd="$2"
-  if eval "$cmd" &>/dev/null; then
+  local desc="$1"
+  shift
+  if "$@" &>/dev/null; then
     echo "  [ok] $desc"
     PASS=$((PASS + 1))
   else
@@ -207,16 +208,16 @@ check() {
   fi
 }
 
-check "jq installed" "command -v jq"
-check "claude installed" "command -v claude"
-check "gh installed" "command -v gh"
-check "gh authenticated" "gh auth status"
-check "task registry exists" "test -f $TASK_REGISTRY"
-check "worktrees dir exists" "test -d $SWARM_DIR/worktrees"
-check "logs dir exists" "test -d $SWARM_DIR/logs"
-check "skill symlinked" "test -L $SKILLS_DIR/agent-swarm"
-check "swap enabled" "swapon --show | grep -q /swapfile"
-check "cron installed" "crontab -l 2>/dev/null | grep -q check-agents"
+check "jq installed" command -v jq
+check "claude installed" command -v claude
+check "gh installed" command -v gh
+check "gh authenticated" gh auth status
+check "task registry exists" test -f "$TASK_REGISTRY"
+check "worktrees dir exists" test -d "$SWARM_DIR/worktrees"
+check "logs dir exists" test -d "$SWARM_DIR/logs"
+check "skill symlinked" test -L "$SKILLS_DIR/agent-swarm"
+check "swap enabled" bash -c "swapon --show | grep -q /swapfile"
+check "cron installed" bash -c "crontab -l 2>/dev/null | grep -q check-agents"
 
 echo ""
 echo "  $PASS passed, $FAIL failed"

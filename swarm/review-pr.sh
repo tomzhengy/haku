@@ -97,7 +97,7 @@ $REVIEW_OUTPUT
 ---
 *reviewed by claude code via agent swarm*"
 
-gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$COMMENT_BODY"
+echo "$COMMENT_BODY" | gh pr comment "$PR_NUMBER" --repo "$REPO" --body-file -
 
 echo "review posted to PR #$PR_NUMBER"
 

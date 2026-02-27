@@ -2,6 +2,15 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# load environment for cron (PATH, GITHUB_TOKEN, etc.)
+if [[ -f "$HOME/.openclaw/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$HOME/.openclaw/.env"
+  set +a
+fi
+
 # shellcheck source=lib/registry.sh
 source "$SCRIPT_DIR/lib/registry.sh"
 
@@ -138,7 +147,7 @@ if [[ "$completed_count" -gt 0 ]]; then
     log "task '$id' triggering review for PR #$pr_number"
     registry_update_status "$id" "reviewing"
     registry_set_field "$id" "ciStatus" "passing"
-    "$REVIEW" --repo "$remote_repo" --pr "$pr_number" --task-id "$id" &
+    "$REVIEW" --repo "$remote_repo" --pr "$pr_number" --task-id "$id"
   done
 fi
 

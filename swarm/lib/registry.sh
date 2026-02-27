@@ -27,21 +27,27 @@ _now_iso() {
 
 registry_init() {
   mkdir -p "$(dirname "$TASK_REGISTRY")"
+
+  local _init_registry
+  _init_registry="$(jq -n \
+    --argjson max "$MAX_CONCURRENT" \
+    --argjson age "$MAX_TASK_AGE_HOURS" \
+    '{version: 1, config: {maxConcurrent: $max, maxTaskAgeHours: $age}, tasks: []}')"
+
   if [[ ! -f "$TASK_REGISTRY" ]]; then
-    _registry_write "$TASK_REGISTRY" '{
-  "version": 1,
-  "config": {
-    "maxConcurrent": '"$MAX_CONCURRENT"',
-    "maxTaskAgeHours": '"$MAX_TASK_AGE_HOURS"'
-  },
-  "tasks": []
-}'
+    _registry_write "$TASK_REGISTRY" "$_init_registry"
+  elif ! jq empty "$TASK_REGISTRY" 2>/dev/null; then
+    echo "WARNING: $TASK_REGISTRY contains invalid JSON. backing up and reinitializing." >&2
+    mv "$TASK_REGISTRY" "${TASK_REGISTRY}.bak.$(date +%s)"
+    _registry_write "$TASK_REGISTRY" "$_init_registry"
   fi
+
   if [[ ! -f "$TASK_ARCHIVE" ]]; then
-    _registry_write "$TASK_ARCHIVE" '{
-  "version": 1,
-  "tasks": []
-}'
+    _registry_write "$TASK_ARCHIVE" '{"version": 1, "tasks": []}'
+  elif ! jq empty "$TASK_ARCHIVE" 2>/dev/null; then
+    echo "WARNING: $TASK_ARCHIVE contains invalid JSON. backing up and reinitializing." >&2
+    mv "$TASK_ARCHIVE" "${TASK_ARCHIVE}.bak.$(date +%s)"
+    _registry_write "$TASK_ARCHIVE" '{"version": 1, "tasks": []}'
   fi
 }
 
@@ -110,16 +116,16 @@ registry_update_status() {
   local now
   now="$(_now_iso)"
 
-  local completed_update=""
-  if [[ "$new_status" == "completed" || "$new_status" == "failed" || "$new_status" == "merged" || "$new_status" == "closed" ]]; then
-    completed_update='| .completedAt = $now'
-  fi
-
   local updated
   updated="$(jq --arg id "$id" \
     --arg status "$new_status" \
     --arg now "$now" \
-    '(.tasks[] | select(.id == $id)) |= (.status = $status | .updatedAt = $now '"$completed_update"')' \
+    '(.tasks[] | select(.id == $id)) |= (
+      .status = $status |
+      .updatedAt = $now |
+      if ($status == "completed" or $status == "failed" or $status == "merged" or $status == "closed")
+      then .completedAt = $now else . end
+    )' \
     "$TASK_REGISTRY")"
 
   _registry_write "$TASK_REGISTRY" "$updated"

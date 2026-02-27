@@ -2,6 +2,15 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# load environment for cron (PATH, GITHUB_TOKEN, etc.)
+if [[ -f "$HOME/.openclaw/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$HOME/.openclaw/.env"
+  set +a
+fi
+
 # shellcheck source=lib/registry.sh
 source "$SCRIPT_DIR/lib/registry.sh"
 
@@ -24,7 +33,7 @@ for status in merged closed failed ready; do
 
   [[ "$count" -eq 0 ]] && continue
 
-  echo "$tasks" | jq -c '.[]' | while IFS= read -r task; do
+  while IFS= read -r task; do
     id="$(echo "$task" | jq -r '.id')"
     completed_at="$(echo "$task" | jq -r '.completedAt // .updatedAt')"
     worktree_path="$(echo "$task" | jq -r '.worktreePath')"
@@ -64,7 +73,7 @@ for status in merged closed failed ready; do
     }
 
     CLEANED=$((CLEANED + 1))
-  done
+  done < <(echo "$tasks" | jq -c '.[]')
 done
 
 # --- prune worktrees across known repos ---
