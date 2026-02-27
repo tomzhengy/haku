@@ -31,6 +31,7 @@ see `.env.example` for required secrets. see step 3 below for creating the slack
 - [x] step 6: restart gateway and verify locally
 - [x] step 7: test slack bot
 - [x] step 8: deploy to azure VM (B2s, 20.119.67.51)
+- [ ] step 9: set up agent swarm (upgrade to B4ms, run setup-swarm.sh)
 
 ## Remaining Local Steps
 

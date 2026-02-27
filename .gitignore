@@ -1,1 +1,6 @@
 .env
+.clawdbot/
+swarm/logs/
+*.octoshift.log
+*.octoshift.verbose.log
+migration-log-*
