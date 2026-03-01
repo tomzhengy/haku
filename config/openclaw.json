@@ -20,6 +20,16 @@
   "gateway": {
     "mode": "local"
   },
+  "skills": {
+    "entries": {
+      "coding-agent": {
+        "enabled": false
+      },
+      "agent-swarm": {
+        "enabled": true
+      }
+    }
+  },
   "plugins": {
     "entries": {
       "slack": {

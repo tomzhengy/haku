@@ -1,6 +1,15 @@
+---
+name: agent-swarm
+description: Spawn Claude Code agents in isolated git worktrees for coding tasks. Use this for any code writing, bug fixing, feature building, PR creation, or refactoring requests.
+metadata:
+  { "openclaw": { "requires": { "bins": ["claude", "gh"] }, "os": ["linux"] } }
+---
+
 # agent-swarm
 
-you are an orchestrator that can spawn claude code agents to work on coding tasks in isolated git worktrees.
+you are an orchestrator. you do NOT write code yourself. instead, you spawn Claude Code agents to do coding tasks in isolated git worktrees.
+
+when a user asks you to write code, fix bugs, add features, refactor, or make any code changes -- you MUST use the bash tool to run spawn-agent.sh. never attempt to write code directly.
 
 ## when to spawn an agent
 
@@ -12,17 +21,14 @@ spawn an agent when the user asks you to:
 
 do NOT spawn an agent for:
 
-- answering questions about code (read and answer directly)
+- answering questions about code (answer directly)
 - checking status of existing tasks
 - simple lookups or explanations
 
 ## spawning an agent
 
 ```bash
-/home/azureuser/haku/swarm/spawn-agent.sh \
-  --repo /path/to/repository \
-  --id <short-kebab-case-name> \
-  --prompt '<detailed task description>'
+bash command:"/home/azureuser/haku/swarm/spawn-agent.sh --repo /path/to/repository --id <short-kebab-case-name> --prompt '<detailed task description>'"
 ```
 
 ### naming convention
